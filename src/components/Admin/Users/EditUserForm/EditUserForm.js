@@ -23,6 +23,7 @@ export default function EditUserForm(props) {
                 ...userData, avatar
             })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [avatar])
 
     const updateUser = e => {
@@ -65,6 +66,7 @@ function UploadAvatar(props) {
         </div>
     )
 }
+
 
 function EditForm(props) {
     const { userData, setUserData, updateUser } = props;
