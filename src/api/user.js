@@ -97,3 +97,57 @@ export function getUsersActiveApi(token, status) {
             return err.message;
         })
 }
+
+//funcion para subir imagenes al usuario
+export function uploadAvatarApi(token, avatar, userId) {
+    const url = `${basePath}/${apiVersion}/upload-avatar/${userId}`;
+    //obligatorio hacerlo cuando queremos mandar una imagen mediante una peticion fetch
+    const formData = new FormData();
+
+    formData.append("avatar", avatar, avatar.name);
+
+    const params = {
+        method: "PUT",
+        body: formData,//estamos enviando la imagen 
+        headers: {
+            Authorization: token
+        }
+    }
+    return fetch(url, params).then(response => {
+        return response.json();
+    }).then(result => {
+        return result;
+    }).catch(err => {
+        return err.message;
+    })
+}
+//funcion para obtener la url de un avatar
+export function getAvatarApi(avatarName) {
+    const url = `${basePath}/${apiVersion}/get-avatar/${avatarName}`;
+
+    return fetch(url).then(response => {
+        return response.url;
+    }).catch(err => {
+        return err.message;
+    })
+}
+
+//funcion para hacer update de un avatar
+export function updateUserApi(token, user, userId) {
+    const url = `${basePath}/${apiVersion}/update-user/${userId}`;
+    const params = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+        },
+        body: JSON.stringify(user)
+    }
+    return fetch(url, params).then(response => {
+        return response.json();
+    }).then(result => {
+        return result;
+    }).catch(err => {
+        return err.message;
+    })
+}
