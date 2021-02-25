@@ -12,12 +12,45 @@ export default function EditUserForm(props) {
     const { setIsVisibleModal, setReloadUsers } = props;
     const [userData, setUserData] = useState({});
 
+    //Funcion para agregar usuario a la BD
     const addUser = event => {
         //para que no se recargue la pagina cuando se envie un formulario.
         event.preventDefault();
 
-        console.log("Creando Uusario.")
-    }
+        if (
+            !userData.name ||
+            !userData.lastname ||
+            !userData.role ||
+            !userData.email ||
+            !userData.password ||
+            !userData.repeatPassword
+        ) {
+            notification["error"]({
+                message: "Todos los campos son obligatorios."
+            })
+        } else if (userData.password !== userData.repeatPassword) {
+            notification["error"]({
+                message: "Las contraseñas deben ser iguales."
+            })
+        } else {
+            const accesToken = getAccessTokenApi();
+
+            signUpAdminApi(accesToken, userData)
+                .then(response => {
+                    notification["success"]({
+                        message: response
+                    })
+                    setIsVisibleModal(false);
+                    setReloadUsers(true);
+                    setUserData({});
+                })
+                .catch(err => {
+                    notification["error"]({
+                        message: err
+                    });
+                });
+        }
+    };
 
     return (
         <div className="add-user-form">
