@@ -1,14 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Avatar, Form, Input, Select, Button, Row, Col } from "antd";
+import { Avatar, Form, Input, Select, Button, Row, Col, notification } from "antd";
 import { Icon } from '@ant-design/compatible';
 import { useDropzone } from "react-dropzone";
 import NoAvatar from '../../../../assets/img/png/no-avatar.png';
-import { getAvatarApi } from "../../../../api/user"
+import { uploadAvatarApi, updateUserApi, getAvatarApi } from "../../../../api/user"
+import { getAccessTokenApi } from "../../../../api/auth";
 
 import "./EditUserForm.scss";
 
 export default function EditUserForm(props) {
-    const { user } = props;
+    const { user, setIsVisibleModal, setReloadUsers } = props;
     const [avatar, setAvatar] = useState(null);
     const [userData, setUserData] = useState({});
 
@@ -43,8 +44,47 @@ export default function EditUserForm(props) {
 
     const updateUser = e => {
         e.preventDefault();
-        console.log(userData);
-    }
+        const token = getAccessTokenApi();
+        let userUpdate = userData;
+
+        if (userUpdate.password || userUpdate.repeatPassword) {
+            if (userUpdate.password !== userUpdate.repeatPassword) {
+                notification["error"]({
+                    message: "Las contraseñas tienen que ser iguales."
+                });
+                return;
+            } else {
+                //eliminamos la propiedad repeat password de elobjeto userUpdate que el el que se envia a la bd
+                delete userUpdate.repeatPassword;
+            }
+        }
+        if (!userUpdate.name || !userUpdate.lastname || !userUpdate.email) {
+            notification["error"]({
+                message: "El nombre, apellidos y email son obligatorios."
+            })
+            return;
+        }
+        if (typeof userUpdate.avatar == "object") {
+            uploadAvatarApi(token, userUpdate.avatar, user._id).then(response => {
+                userUpdate.avatar = response.avatarName;
+                updateUserApi(token, userUpdate, user._id).then(result => {
+                    notification["success"]({
+                        message: result.message
+                    });
+                    setIsVisibleModal(false);
+                    setReloadUsers(true);
+                });
+            });
+        } else {
+            updateUserApi(token, userUpdate, user._id).then(result => {
+                notification["success"]({
+                    message: result.message
+                });
+                setIsVisibleModal(false);
+                setReloadUsers(true);
+            });
+        }
+    };
 
     return (
         <div className="edit-user-form">
