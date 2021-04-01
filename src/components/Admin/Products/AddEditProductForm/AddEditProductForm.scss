@@ -1,0 +1,20 @@
+@import "../../../../scss/index.scss";
+
+.add-edit-product-form {
+  text-align: center;
+
+  .ant-form-item {
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    __icon {
+      color: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .btn-submit {
+    width: 100%;
+  }
+}
+
+//pendiente validar clase del icono

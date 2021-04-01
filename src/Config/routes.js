@@ -7,10 +7,12 @@ import AdminHome from '../Pages/Admin'
 import AdminSingIn from "../Pages/Admin/SignIn";
 import AdminUsers from '../Pages/Admin/Users'
 import AdminMenuWeb from "../Pages/Admin/MenuWeb";
+import AdminProducts from "../Pages/Admin/Products";
 
 //import pages
 import Home from '../Pages/Home';
-import Contact from '../Pages/Contact'
+import Contact from '../Pages/Contact';
+import Products from '../Pages/Products';
 
 //import transversal pages
 import Error404 from '../Pages/Error404'
@@ -43,6 +45,11 @@ const routes = [
                 exact: true
             },
             {
+                path: "/admin/products",
+                component: AdminProducts,
+                exact: true
+            },
+            {
                 component: Error404
             }
         ]
@@ -61,6 +68,11 @@ const routes = [
             {
                 path: "/contact",
                 component: Contact,
+                exact: true
+            },
+            {
+                path: "/products",
+                component: Products,
                 exact: true
             },
             {
