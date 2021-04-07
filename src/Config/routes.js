@@ -15,6 +15,7 @@ import AdminBlog from "../Pages/Admin/Blog";
 import Home from '../Pages/Home';
 import Contact from '../Pages/Contact';
 import Products from '../Pages/Products';
+import Blog from '../Pages/Blog';
 
 //import transversal pages
 import Error404 from '../Pages/Error404'
@@ -80,6 +81,16 @@ const routes = [
             {
                 path: "/products",
                 component: Products,
+                exact: true
+            },
+            {
+                path: "/blog",
+                component: Blog,
+                exact: true
+            },
+            {
+                path: "/blog/:url",
+                component: Blog,
                 exact: true
             },
             {
